@@ -30,10 +30,6 @@ public class Clock
             timer.cancel();
             System.out.println("out of time");
         }
-        if (decrDown.time() <= 0)
-        {
-            timer.cancel();
-        }
     }
 
 
