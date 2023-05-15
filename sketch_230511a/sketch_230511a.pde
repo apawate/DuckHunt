@@ -1,21 +1,38 @@
-PImage[] img = new PImage[2];
+import java.util.*;
+PImage[] imgd = new PImage[2];
+PImage[] imgp = new PImage[2];
 PImage back;
-int duckX = 0, duckY = 0, velo = 7;
+int velo = 7, x = 0,rand,type;
 
 void setup() {
   size(400,400);
   back = loadImage("download.png");
-  img[0] = loadImage("duck0.png");
-  img[1] = loadImage("duck1.png");
+  imgd[0] = loadImage("duck0.png");
+  imgd[1] = loadImage("duck1.png");
+  imgp[0] = loadImage("pelican0.png");
+  imgp[1] = loadImage("pelican1.png");
   frameRate(velo);
-  
+  rand = (int)(Math.random()*400);
+  type = (int)(Math.random()*2);
 }
 
 void draw() {
   image(back, 0 , 0, 400,400);
-  image(img[frameCount%2], duckX, duckY, 100, 100);
-  duckX = duckX + velo;
-  if ( duckX > width+100)  {
-      duckX = -250;
+  animal(type, rand);
+}
+
+void animal(int type, int Y){
+  if(type == 0){
+  image(imgd[frameCount%2], x, Y, 100, 100);
+  x = x + velo;
+  if ( x > width+100)  {
+      x = -250;
+  }
+  }else{
+  image(imgp[frameCount%2], x, Y, 100, 100);
+  x = x + velo;
+  if ( x > width+100)  {
+      x = -250;
+  }
   }
 }
