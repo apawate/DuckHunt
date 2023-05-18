@@ -39,5 +39,48 @@ public class GameCharacter {
     vx = vx + changex;
     vy = vy + changey;
     vz = vz + changez;
+  void display() {
+    x = x + vx;
+    y = y + vy;
+    z = z + vz;
+    pushMatrix();
+    translate(x, y, z);
+    
 }
+
+public class Bird extends GameCharacter {
+  int foodcount;
+  String name;
+  boolean hasFallen;
+  int foodlimit;
+  int starvelimit;
+  PImage[] flap = new PImage[2];
+  public Bird(int x, int y, int z, int length, int height) {
+    super(x, y, z, length, height);
+  }
+  
+  int hit() {
+    hasFallen = true;
+  }
+  int feed() {
+    foodcount++;
+  }
+  void fall() {
+    // Animation stuff
+  }
+  void attack() {
+    // More animation stuff
+  }
+  void display() {
+    image(flap[frameCount%2], x, y, 100, 100);
+    x = x + vx;
+    if (x > width+100) {
+      x = -100;
+    }
+}
+
+class Duck extends Bird {
+  public Duck(int x, int y, int z, int length, int height) {
+    super(x, y, z, length, height);
+  }
     
