@@ -6,7 +6,7 @@ float gravity = 0.05; // acceleration due to gravity
 float radius = 50; // ball radius
 float velscaler = 30;
 float birdz = -1000;
-PImage img = new PImage();
+PImage img = new PImage;
 
 void setup() {
   size(800, 600, P3D);
