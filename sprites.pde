@@ -65,11 +65,18 @@ public class Bird extends GameCharacter {
   int feed() {
     foodcount++;
   }
+  int starve() {
+    foodcount--;
+  }
   void fall() {
-    // Animation stuff
+    if (foodcount > foodlimit) {
+      // Animation stuff
+    }
   }
   void attack() {
-    // More animation stuff
+    if (foodcount < starvelimit) {
+      // Animation stuff
+    }
   }
   void display() {
     image(flap[frameCount%2], x, y, 100, 100);
@@ -82,5 +89,13 @@ public class Bird extends GameCharacter {
 class Duck extends Bird {
   public Duck(int x, int y, int z, int length, int height) {
     super(x, y, z, length, height);
+    foodlimit = 15;
+    name = "Duck" // Needs to be changed to some kind of unique identifier
+    starvelimit = 5;
+    foodcount = 10;
+    flap[0] = loadImage("duck0.png");
+    flap[1] = loadImage("duck1.png");
   }
+}
+  
     
