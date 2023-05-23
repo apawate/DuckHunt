@@ -1,12 +1,19 @@
 Duck d;
 Pelican p;
+Bread b;
+Duck d1;
+Pelican p1;
+Duck d2; 
+Pelican p2;
+Duck d3;
+Pelican p3;
 class GameCharacter {
-  int x;
-  int y;
-  int z;
-  int vy;
-  int vx;
-  int vz;
+  float x;
+  float y;
+  float z;
+  float vy;
+  float vx;
+  float vz;
   int length;
   int height;
   PImage image = new PImage();
@@ -21,8 +28,8 @@ class GameCharacter {
     this.height = height;
   }
   
-  public int[] getCoordinates() {
-    int[] retval = {x, y, z};
+  public float[] getCoordinates() {
+    float[] retval = {x, y, z};
     return retval;
   }
   
@@ -40,7 +47,7 @@ class GameCharacter {
     return false;
   }
   
-  void accelerate(int changex, int changey, int changez) {
+  void accelerate(float changex, float changey, float changez) {
     vx = vx + changex;
     vy = vy + changey;
     vz = vz + changez;
@@ -49,9 +56,10 @@ class GameCharacter {
     x = x + vx;
     y = y + vy;
     z = z + vz;
-    image(img, x, y, 100, 100);
+    image(image, x, y, 100, 100);
     pushMatrix();
     translate(x, y, z);
+    popMatrix();
   }
 }
 
@@ -89,7 +97,7 @@ class Bird extends GameCharacter {
     }
   }
   void display() {
-    image(flap[frameCount%2], x, y, 100, 100);
+    image(flap[frameCount%2], x, y, length, height);
     x = x + vx;
     if (x > width+100) {
       x = -100;
@@ -121,19 +129,45 @@ class Pelican extends Bird {
   }
 }
 
+class Bread extends GameCharacter {
+  public Bread(int x, int y, int z, int length, int height) {
+    super(x, y, z, length, height);
+    image = loadImage("bread.png");
+  }
+}
+
 void setup() {
-  size(400, 400);
-  d = new Duck(0, 0, -1000, 10, 10);
-  p = new Pelican(0, 100, -1000, 10, 10);
+  size(1000, 1000);
+  d = new Duck(0, 0, -1000, 100, 100);
+  d1 = new Duck(100, 100, -1000, 100, 100);
+  p = new Pelican(0, 100, -1000, 150, 150);
+  p1 = new Pelican(125, 100, -1000, 150, 150);
+  d2 = new Duck(138, 642, -1000, 100, 100);
+  p2 = new Pelican(372, 135, -1000, 150, 150);
+  d3 = new Duck(853, 12, -1000, 100, 100);
+  p3 = new Pelican(753, 799, -1000, 150, 150);
+  b = new Bread(500, 1000, 0, 150, 150);
   d.accelerate(8, 0, 0);
   p.accelerate(5, 0, 0);
+  d1.accelerate(18, 0, 0);
+  d2.accelerate(10, 0, 0);
+  d3.accelerate(7, 0, 0);
+  p1.accelerate(3, 0, 0);
+  p2.accelerate(5, 0, 0);
+  p3.accelerate(2, 0, 0);
+  b.accelerate(-10, -10, -100);
 
 }
 void draw() {
-  image(loadImage("download.png"), 0, 0, 400, 400);
+  image(loadImage("download.png"), 0, 0, 1000, 1000);
   d.display();
   p.display();
+  d1.display();
+  p1.display();
+  d2.display();
+  p2.display();
+  d3.display();
+  p3.display();
+  b.display();
+  b.accelerate(0, 0.2, 0);
 }
-
-class Bread extends GameCharacter {
-  
