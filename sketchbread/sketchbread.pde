@@ -24,20 +24,24 @@ void draw() {
   noStroke();
   background(255);
   fill(255, 255, 255);
-  translate(width/2 + 25, height - 25, 0);
-  if (width/2 != mouseX)
+  translate(x - 200, y - 300, z);
+  image(img,x - 200,y - 300,50,50);
+  translate(200-x, 300-y, -z);
+    translate(width/2, height - 25, 0);
+  if (width/2 != mouseX && mouseX > width/2)
   rotate(atan((height - mouseY)/(width/2 - mouseX)) + PI/2);
-  image(barrel, 0, 0, 50, 100);
-  if (width/2 != mouseX)
+  if (width/2 != mouseX && mouseX < width/2)
+  rotate(atan((height - mouseY)/(width/2 - mouseX)) + 3 * PI/ 2);
+  image(barrel, 0, 0, 60, 120);
+  if (width/2 != mouseX && mouseX > width/2)
   rotate(-atan((height - mouseY)/(width/2 - mouseX)) - PI/2);
-  translate(-width/2 - 25, -height + 25, 0);
-  translate(x - 200, y - 250, z);
-  image(img,x - 200,y - 250,50,50);
-  
+  if (width/2 != mouseX && mouseX < width/2)
+  rotate(-atan((height - mouseY)/(width/2 - mouseX)) - 3 * PI/ 2);
   // update ball position and velocity
   x += vx;
   y += vy;
   z += vz;
+  println(z);
   vy += gravity;
 }
 
