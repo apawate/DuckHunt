@@ -1,4 +1,5 @@
 Duck d;
+Pelican p;
 class GameCharacter {
   int x;
   int y;
@@ -8,6 +9,7 @@ class GameCharacter {
   int vz;
   int length;
   int height;
+  PImage image = new PImage();
   public GameCharacter(int x, int y, int z, int length, int height) {
     this.x = x;
     this.y = y;
@@ -47,6 +49,7 @@ class GameCharacter {
     x = x + vx;
     y = y + vy;
     z = z + vz;
+    image(img, x, y, 100, 100);
     pushMatrix();
     translate(x, y, z);
   }
@@ -86,15 +89,11 @@ class Bird extends GameCharacter {
     }
   }
   void display() {
-    println("hi");
     image(flap[frameCount%2], x, y, 100, 100);
-    println("hi2");
     x = x + vx;
-    println("hi3");
     if (x > width+100) {
       x = -100;
     }
-    println("hi4");
   }
 }
 
@@ -125,9 +124,16 @@ class Pelican extends Bird {
 void setup() {
   size(400, 400);
   d = new Duck(0, 0, -1000, 10, 10);
+  p = new Pelican(0, 100, -1000, 10, 10);
+  d.accelerate(8, 0, 0);
+  p.accelerate(5, 0, 0);
 
 }
 void draw() {
-  image(loadImage("background.png"), 0, 0, 400, 400);
+  image(loadImage("download.png"), 0, 0, 400, 400);
   d.display();
+  p.display();
 }
+
+class Bread extends GameCharacter {
+  
