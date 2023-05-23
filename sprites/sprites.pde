@@ -1,4 +1,5 @@
-public class GameCharacter {
+Duck d;
+class GameCharacter {
   int x;
   int y;
   int z;
@@ -19,16 +20,18 @@ public class GameCharacter {
   }
   
   public int[] getCoordinates() {
-    return {x, y, z};
+    int[] retval = {x, y, z};
+    return retval;
   }
   
   public int[] getBox() {
-    return {length, height};
+    int[] retval = {length, height};
+    return retval;
   }
   
   boolean hasCollided(GameCharacter other) {
-    if (this.z == other.getCoordinates[2]) {
-      if (((this.x + this.length/2.0) > other.getCoordinates[0]) && (this.x - this.length/2.0) < other.getCoordinates[0])) && ((this.y + this.height/2.0) > other.getCoordinates[1]) && (this.y - this.height/2.0) < other.getCoordinates[1]))) {
+    if (this.z == other.getCoordinates()[2]) {
+      if ((((this.x + this.length/2.0) > other.getCoordinates()[0]) && ((this.x - this.length/2.0) < other.getCoordinates()[0]) && ((this.y + this.height/2.0) > other.getCoordinates()[1]) && (this.y - this.height/2.0) < other.getCoordinates()[1])) {
         return true;
       }
     }
@@ -39,16 +42,17 @@ public class GameCharacter {
     vx = vx + changex;
     vy = vy + changey;
     vz = vz + changez;
+  }
   void display() {
     x = x + vx;
     y = y + vy;
     z = z + vz;
     pushMatrix();
     translate(x, y, z);
-    
+  }
 }
 
-public class Bird extends GameCharacter {
+class Bird extends GameCharacter {
   int foodcount;
   String name;
   boolean hasFallen;
@@ -57,16 +61,19 @@ public class Bird extends GameCharacter {
   PImage[] flap = new PImage[2];
   public Bird(int x, int y, int z, int length, int height) {
     super(x, y, z, length, height);
+      frameRate(8);
   }
   
-  int hit() {
+  void hit() {
     hasFallen = true;
   }
   int feed() {
     foodcount++;
+    return foodcount;
   }
   int starve() {
     foodcount--;
+    return foodcount;
   }
   void fall() {
     if (foodcount > foodlimit) {
@@ -79,23 +86,48 @@ public class Bird extends GameCharacter {
     }
   }
   void display() {
+    println("hi");
     image(flap[frameCount%2], x, y, 100, 100);
+    println("hi2");
     x = x + vx;
+    println("hi3");
     if (x > width+100) {
       x = -100;
     }
+    println("hi4");
+  }
 }
 
 class Duck extends Bird {
   public Duck(int x, int y, int z, int length, int height) {
     super(x, y, z, length, height);
     foodlimit = 15;
-    name = "Duck" // Needs to be changed to some kind of unique identifier
+    name = "Duck"; // Needs to be changed to some kind of unique identifier
     starvelimit = 5;
     foodcount = 10;
     flap[0] = loadImage("duck0.png");
     flap[1] = loadImage("duck1.png");
   }
 }
-  
-    
+
+class Pelican extends Bird {
+  public Pelican(int x, int y, int z, int length, int height) {
+    super (x, y, z, length, height);
+    foodlimit = 25;
+    name = "Pelican"; // again needs to be changed
+    starvelimit = 10;
+    foodcount = 15;
+    flap[0] = loadImage("pelican0.png");
+    flap[1] = loadImage("pelican1.png");
+  }
+}
+
+void setup() {
+  size(400, 400);
+  d = new Duck(0, 0, -1000, 10, 10);
+
+}
+void draw() {
+  image(loadImage("background.png"), 0, 0, 400, 400);
+  d.display();
+}
