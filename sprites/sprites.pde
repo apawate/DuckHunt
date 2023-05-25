@@ -136,6 +136,45 @@ class Bread extends GameCharacter {
   }
 }
 
+class Gun {
+  PImage barrel = new PImage();
+  Queue<Bread> ammo;
+  public Gun() {
+    barrel = loadImage("gun.png");
+  }
+  void turn() {  
+    x = width/2;
+    y = height ;
+    z = 0;
+    image(barrel, 0, 0, 60, 120);
+    translate(x, y, z);
+    if (width/2 != mouseX && mouseX > width/2)
+      rotate(-atan((height - mouseY)/(width/2 - mouseX)) - PI/2);
+    if (width/2 != mouseX && mouseX < width/2)
+      rotate(-atan((height - mouseY)/(width/2 - mouseX)) - 3 * PI/ 2);
+  }
+  
+  void reload(Bread new) {
+    ammo.add(new);
+  }
+  
+  Bread fire() {
+    if (ammo.peek() == null) {
+      return null;
+    }
+    Bread b = ammo.remove();
+    targetX = mouseX;
+    targetY = mouseY;
+    float vy = -(targety - y)*(targety - y)/7500;
+    float vx = (targetx - x )/time*3.27;
+    float vz = -100;
+    b.accelerate(vx, vy, vz);
+  }
+}
+    
+    
+    
+
 void setup() {
   size(1000, 1000);
   d = new Duck(0, 0, -1000, 100, 100);
@@ -159,7 +198,7 @@ void setup() {
 
 }
 void draw() {
-  image(loadImage("download.png"), 0, 0, 1000, 1000);
+  image(loadImage("grass.png"), 0, 0, 1000, 1000);
   d.display();
   p.display();
   d1.display();

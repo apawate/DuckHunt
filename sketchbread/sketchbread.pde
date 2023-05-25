@@ -27,7 +27,7 @@ void draw() {
   translate(x - 200, y - 300, z);
   image(img,x - 200,y - 300,50,50);
   translate(200-x, 300-y, -z);
-    translate(width/2, height - 25, 0);
+  translate(width/2, height - 25, 0);
   if (width/2 != mouseX && mouseX > width/2)
   rotate(atan((height - mouseY)/(width/2 - mouseX)) + PI/2);
   if (width/2 != mouseX && mouseX < width/2)
