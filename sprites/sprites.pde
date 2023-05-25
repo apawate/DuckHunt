@@ -17,7 +17,7 @@ class GameCharacter {
   int length;
   int height;
   PImage image = new PImage();
-  public GameCharacter(int x, int y, int z, int length, int height) {
+  public GameCharacter(float x, float y, float z, int length, int height) {
     this.x = x;
     this.y = y;
     this.z = z;
@@ -70,7 +70,7 @@ class Bird extends GameCharacter {
   int foodlimit;
   int starvelimit;
   PImage[] flap = new PImage[2];
-  public Bird(int x, int y, int z, int length, int height) {
+  public Bird(float x, float y, float z, int length, int height) {
     super(x, y, z, length, height);
       frameRate(8);
   }
@@ -106,7 +106,7 @@ class Bird extends GameCharacter {
 }
 
 class Duck extends Bird {
-  public Duck(int x, int y, int z, int length, int height) {
+  public Duck(float x, float y, float z, int length, int height) {
     super(x, y, z, length, height);
     foodlimit = 15;
     name = "Duck"; // Needs to be changed to some kind of unique identifier
@@ -118,7 +118,7 @@ class Duck extends Bird {
 }
 
 class Pelican extends Bird {
-  public Pelican(int x, int y, int z, int length, int height) {
+  public Pelican(float x, float y, float z, int length, int height) {
     super (x, y, z, length, height);
     foodlimit = 25;
     name = "Pelican"; // again needs to be changed
@@ -130,7 +130,7 @@ class Pelican extends Bird {
 }
 
 class Bread extends GameCharacter {
-  public Bread(int x, int y, int z, int length, int height) {
+  public Bread(float x, float y, float z, int length, int height) {
     super(x, y, z, length, height);
     image = loadImage("bread.png");
   }
