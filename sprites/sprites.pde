@@ -3,10 +3,7 @@ Pelican p;
 Bread b;
 Duck d1;
 Pelican p1;
-Duck d2; 
-Pelican p2;
-Duck d3;
-Pelican p3;
+Gun g;
 class GameCharacter {
   float x;
   float y;
@@ -138,37 +135,47 @@ class Bread extends GameCharacter {
 
 class Gun {
   PImage barrel = new PImage();
-  Queue<Bread> ammo;
+  ArrayList<Bread> ammo;
+  float x = width/2;
+  float y = height ;
+  float z = 0;
   public Gun() {
     barrel = loadImage("gun.png");
+    ammo = new ArrayList<Bread>();
   }
   void turn() {  
-    x = width/2;
-    y = height ;
-    z = 0;
-    image(barrel, 0, 0, 60, 120);
+    println("antone");
     translate(x, y, z);
+    println(x);
+    println(y);
+    println(z);
     if (width/2 != mouseX && mouseX > width/2)
-      rotate(-atan((height - mouseY)/(width/2 - mouseX)) - PI/2);
+    rotate(atan((height - mouseY)/(width/2 - mouseX)) + PI/2);
     if (width/2 != mouseX && mouseX < width/2)
-      rotate(-atan((height - mouseY)/(width/2 - mouseX)) - 3 * PI/ 2);
+    rotate(atan((height - mouseY)/(width/2 - mouseX)) + 3 * PI/ 2);
+    image(barrel, 0, 0, 60, 120);
   }
   
-  void reload(Bread new) {
-    ammo.add(new);
+  void reload(Bread nu) {
+    ammo.add(nu);
+  }
+  
+  void reload() {
+    ammo.add(new Bread(x, y, 0, 150, 150));
   }
   
   Bread fire() {
-    if (ammo.peek() == null) {
+    if (ammo.size() == 0) {
       return null;
     }
-    Bread b = ammo.remove();
-    targetX = mouseX;
-    targetY = mouseY;
-    float vy = -(targety - y)*(targety - y)/7500;
-    float vx = (targetx - x )/time*3.27;
+    Bread b = ammo.get(0);
+    float targetX = mouseX;
+    float targetY = mouseY;
+    float vy = -(targetY - y)*(targetY - y)/7500;
+    float vx = (targetX - x )/30*3.27;
     float vz = -100;
     b.accelerate(vx, vy, vz);
+    return b;
   }
 }
     
@@ -176,37 +183,40 @@ class Gun {
     
 
 void setup() {
-  size(1000, 1000);
+  size(800, 600, P3D);
+  g = new Gun();
   d = new Duck(0, 0, -1000, 100, 100);
   d1 = new Duck(100, 100, -1000, 100, 100);
   p = new Pelican(0, 100, -1000, 150, 150);
   p1 = new Pelican(125, 100, -1000, 150, 150);
-  d2 = new Duck(138, 642, -1000, 100, 100);
-  p2 = new Pelican(372, 135, -1000, 150, 150);
-  d3 = new Duck(853, 12, -1000, 100, 100);
-  p3 = new Pelican(753, 799, -1000, 150, 150);
+  //d2 = new Duck(138, 642, -1000, 100, 100);
+  //p2 = new Pelican(372, 135, -1000, 150, 150);
+  //d3 = new Duck(853, 12, -1000, 100, 100);
+  //p3 = new Pelican(753, 799, -1000, 150, 150);
   b = new Bread(500, 1000, 0, 150, 150);
   d.accelerate(8, 0, 0);
   p.accelerate(5, 0, 0);
   d1.accelerate(18, 0, 0);
-  d2.accelerate(10, 0, 0);
-  d3.accelerate(7, 0, 0);
+  //d2.accelerate(10, 0, 0);
+  //d3.accelerate(7, 0, 0);
   p1.accelerate(3, 0, 0);
-  p2.accelerate(5, 0, 0);
-  p3.accelerate(2, 0, 0);
-  b.accelerate(-10, -10, -100);
+  //p2.accelerate(5, 0, 0);
+  //p3.accelerate(2, 0, 0);
+  g.reload(b);
 
 }
 void draw() {
-  image(loadImage("grass.png"), 0, 0, 1000, 1000);
+  image(loadImage("grass.png"), 0, 0, 800, 600);
   d.display();
   p.display();
   d1.display();
   p1.display();
-  d2.display();
-  p2.display();
-  d3.display();
-  p3.display();
-  b.display();
-  b.accelerate(0, 0.2, 0);
+  g.turn();
+}
+
+void keyPressed() {
+  println("1");
+  g.reload();
+  g.reload();
+  g.fire().display();
 }
