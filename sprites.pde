@@ -4,6 +4,7 @@ Bread b;
 Duck d1;
 Pelican p1;
 Gun g;
+float gravity = 0.5;
 class GameCharacter {
   float x;
   float y;
@@ -13,7 +14,6 @@ class GameCharacter {
   float vz;
   int length;
   int height;
-  PImage img = new PImage();
   public GameCharacter(float x, float y, float z, int length, int height) {
     this.x = x;
     this.y = y;
@@ -35,6 +35,11 @@ class GameCharacter {
     return retval;
   }
   
+  public float getz()
+  {
+    return z;
+  }
+  
   boolean hasCollided(GameCharacter other) {
     if (this.z == other.getCoordinates()[2]) {
       if ((((this.x + this.length/2.0) > other.getCoordinates()[0]) && ((this.x - this.length/2.0) < other.getCoordinates()[0]) && ((this.y + this.height/2.0) > other.getCoordinates()[1]) && (this.y - this.height/2.0) < other.getCoordinates()[1])) {
@@ -53,10 +58,7 @@ class GameCharacter {
     x = x + vx;
     y = y + vy;
     z = z + vz;
-    image(img, x, y, 100, 100);
-    pushMatrix();
-    translate(x, y, z);
-    popMatrix();
+    //image(img, x, y, 100, 100);
   }
 }
 
@@ -127,31 +129,38 @@ class Pelican extends Bird {
 }
 
 class Bread extends GameCharacter {
+  PImage img = new PImage();
   public Bread(float x, float y, float z, int length, int height) {
     super(x, y, z, length, height);
     img = loadImage("bread.png");
   }
     void display()
     {
+      pushMatrix();
+      translate(x - 200, y - 250, z);
+      image(img,x - 200,y - 250, 50,50);
+      popMatrix();
       x += vx;
       y += vy;
       z += vz;
-      image(img,x - 200,y - 300,50,50);
-      translate(200-x, 300-y, -z);
+      vy += gravity;
     }
   }
 
 class Gun {
   PImage barrel = new PImage();
   ArrayList<Bread> ammo;
+  ArrayList<Bread> fired;
   float x = width/2;
   float y = height ;
   float z = 0;
   public Gun() {
     barrel = loadImage("gun.png");
     ammo = new ArrayList<Bread>();
+    fired = new ArrayList<Bread>();
   }
   void turn() {
+    pushMatrix();
     imageMode(CENTER);
     translate(width/2, height - 25, 0);
     if (width/2 != mouseX && mouseX > width/2)
@@ -159,33 +168,39 @@ class Gun {
     if (width/2 != mouseX && mouseX < width/2)
     rotate(atan((height - mouseY)/(width/2 - mouseX)) + 3 * PI/ 2);
     image(barrel, 0, 0, 60, 120);
-     if (width/2 != mouseX && mouseX > width/2)
-    rotate(-atan((height - mouseY)/(width/2 - mouseX)) - PI/2);
-    if (width/2 != mouseX && mouseX < width/2)
-    rotate(-atan((height - mouseY)/(width/2 - mouseX)) - 3 * PI/ 2);
+    popMatrix();
+    for (int i = 0; i < fired.size(); i++)
+    {
+      if (fired.get(i).getz() > -3000)
+      {
+        fired.get(i).display();
+      }
+      else fired.remove(i);
+    }
     imageMode(CORNER);
-    translate(-width/2, 25-height,0);
   }
+  
   
   void reload(Bread nu) {
     ammo.add(nu);
   }
   
   void reload() {
-    ammo.add(new Bread(x, y, 0, 150, 150));
+    ammo.add(new Bread(x, y, 0, 50, 50));
   }
   
   Bread fire() {
     if (ammo.size() == 0) {
       return null;
     }
-    Bread b = ammo.get(0);
+    Bread b = ammo.remove(0);
     float targetX = mouseX;
     float targetY = mouseY;
-    float vy = -(targetY - y)*(targetY - y)/7500;
-    float vx = (targetX - x )/30*3.27;
+    float vy = -(targetY - height)*(targetY - height)/7500;
+    float vx = (targetX - width/2)/30*3.27;
     float vz = -100;
     b.accelerate(vx, vy, vz);
+    fired.add(b);
     return b;
   }
 }
@@ -217,7 +232,10 @@ void setup() {
 
 }
 void draw() {
-  image(loadImage("grass.png"), 0, 0, 800, 600);
+  PImage img;
+  img = loadImage("grass.png");
+  img.resize(800,600);
+  background(img);
   d.display();
   p.display();
   d1.display();
@@ -226,8 +244,8 @@ void draw() {
 }
 
 void keyPressed() {
-  println("1");
   g.reload();
   g.reload();
   g.fire();
+  println(g.fired.size());
 }
