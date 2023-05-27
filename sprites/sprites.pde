@@ -1,9 +1,11 @@
+ArrayList<Bird> birds;
 Duck d;
 Pelican p;
 Bread b;
 Duck d1;
 Pelican p1;
 Gun g;
+float gravity = 0.5;
 class GameCharacter {
   float x;
   float y;
@@ -13,7 +15,6 @@ class GameCharacter {
   float vz;
   int length;
   int height;
-  PImage image = new PImage();
   public GameCharacter(float x, float y, float z, int length, int height) {
     this.x = x;
     this.y = y;
@@ -35,6 +36,11 @@ class GameCharacter {
     return retval;
   }
   
+  public float getz()
+  {
+    return z;
+  }
+  
   boolean hasCollided(GameCharacter other) {
     if (this.z == other.getCoordinates()[2]) {
       if ((((this.x + this.length/2.0) > other.getCoordinates()[0]) && ((this.x - this.length/2.0) < other.getCoordinates()[0]) && ((this.y + this.height/2.0) > other.getCoordinates()[1]) && (this.y - this.height/2.0) < other.getCoordinates()[1])) {
@@ -53,10 +59,7 @@ class GameCharacter {
     x = x + vx;
     y = y + vy;
     z = z + vz;
-    image(image, x, y, 100, 100);
-    pushMatrix();
-    translate(x, y, z);
-    popMatrix();
+    //image(img, x, y, 100, 100);
   }
 }
 
@@ -69,7 +72,7 @@ class Bird extends GameCharacter {
   PImage[] flap = new PImage[2];
   public Bird(float x, float y, float z, int length, int height) {
     super(x, y, z, length, height);
-      frameRate(8);
+      frameRate(30);
   }
   
   void hit() {
@@ -77,6 +80,7 @@ class Bird extends GameCharacter {
   }
   int feed() {
     foodcount++;
+    println("FED! " + foodcount);
     return foodcount;
   }
   int starve() {
@@ -85,7 +89,7 @@ class Bird extends GameCharacter {
   }
   void fall() {
     if (foodcount > foodlimit) {
-      // Animation stuff
+      println("ARGHH! I HAVE FALLEN!");
     }
   }
   void attack() {
@@ -127,54 +131,89 @@ class Pelican extends Bird {
 }
 
 class Bread extends GameCharacter {
+  PImage img = new PImage();
   public Bread(float x, float y, float z, int length, int height) {
     super(x, y, z, length, height);
-    image = loadImage("bread.png");
+    img = loadImage("bread.png");
   }
-}
+    void display()
+    {
+      pushMatrix();
+      translate(x - 200, y - 250, z);
+      image(img,x - 200,y - 250, 50,50);
+      popMatrix();
+      x += vx;
+      y += vy;
+      z += vz;
+      vy += gravity;
+    }
+    
+    void collision(ArrayList<Bird> other) {
+      for (Bird b : other) {
+        if (super.hasCollided(b)) {
+          b.feed();
+        }
+      }
+    }
+  }
 
 class Gun {
   PImage barrel = new PImage();
   ArrayList<Bread> ammo;
+  ArrayList<Bread> fired;
   float x = width/2;
   float y = height ;
   float z = 0;
   public Gun() {
     barrel = loadImage("gun.png");
     ammo = new ArrayList<Bread>();
+    fired = new ArrayList<Bread>();
   }
-  void turn() {  
-    println("antone");
-    translate(x, y, z);
-    println(x);
-    println(y);
-    println(z);
+  ArrayList<Bread> getFired() {
+    return fired;
+  }
+  void turn() {
+    pushMatrix();
+    imageMode(CENTER);
+    translate(width/2, height - 25, 0);
     if (width/2 != mouseX && mouseX > width/2)
     rotate(atan((height - mouseY)/(width/2 - mouseX)) + PI/2);
     if (width/2 != mouseX && mouseX < width/2)
     rotate(atan((height - mouseY)/(width/2 - mouseX)) + 3 * PI/ 2);
     image(barrel, 0, 0, 60, 120);
+    popMatrix();
+    for (int i = 0; i < fired.size(); i++)
+    {
+      if (fired.get(i).getz() > -3000)
+      {
+        fired.get(i).display();
+      }
+      else fired.remove(i);
+    }
+    imageMode(CORNER);
   }
+  
   
   void reload(Bread nu) {
     ammo.add(nu);
   }
   
   void reload() {
-    ammo.add(new Bread(x, y, 0, 150, 150));
+    ammo.add(new Bread(x, y, 0, 50, 50));
   }
   
   Bread fire() {
     if (ammo.size() == 0) {
       return null;
     }
-    Bread b = ammo.get(0);
+    Bread b = ammo.remove(0);
     float targetX = mouseX;
     float targetY = mouseY;
-    float vy = -(targetY - y)*(targetY - y)/7500;
-    float vx = (targetX - x )/30*3.27;
+    float vy = -(targetY - height)*(targetY - height)/7500;
+    float vx = (targetX - width/2)/30*3.27;
     float vz = -100;
     b.accelerate(vx, vy, vz);
+    fired.add(b);
     return b;
   }
 }
@@ -184,10 +223,11 @@ class Gun {
 
 void setup() {
   size(800, 600, P3D);
+  birds = new ArrayList<Bird>();
   g = new Gun();
-  d = new Duck(0, 0, -1000, 100, 100);
-  d1 = new Duck(100, 100, -1000, 100, 100);
-  p = new Pelican(0, 100, -1000, 150, 150);
+  d = new Duck(400, 0, -1000, 100, 100);
+  d1 = new Duck(200, 100, -1000, 100, 100);
+  p = new Pelican(300, 100, -1000, 150, 150);
   p1 = new Pelican(125, 100, -1000, 150, 150);
   //d2 = new Duck(138, 642, -1000, 100, 100);
   //p2 = new Pelican(372, 135, -1000, 150, 150);
@@ -202,21 +242,31 @@ void setup() {
   p1.accelerate(3, 0, 0);
   //p2.accelerate(5, 0, 0);
   //p3.accelerate(2, 0, 0);
+  birds.add(d);
+  birds.add(p);
+  birds.add(d1);
+  birds.add(p1);
   g.reload(b);
 
 }
 void draw() {
-  image(loadImage("grass.png"), 0, 0, 800, 600);
+  PImage img;
+  img = loadImage("grass.png");
+  img.resize(800,600);
+  background(img);
   d.display();
   p.display();
   d1.display();
   p1.display();
   g.turn();
+  for (Bread b : g.getFired()) {
+    b.collision(birds);
+  }
 }
 
 void keyPressed() {
-  println("1");
   g.reload();
   g.reload();
-  g.fire().display();
+  g.fire();
+  println(g.fired.size());
 }
