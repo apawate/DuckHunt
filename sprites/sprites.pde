@@ -43,9 +43,13 @@ class GameCharacter {
   
   boolean hasCollided(GameCharacter other) {
     if (this.z == other.getCoordinates()[2]) {
-      if ((((this.x + this.length/2.0) > other.getCoordinates()[0]) && ((this.x - this.length/2.0) < other.getCoordinates()[0]) && ((this.y + this.height/2.0) > other.getCoordinates()[1]) && (this.y - this.height/2.0) < other.getCoordinates()[1])) {
-        return true;
+      if ((this.x < (other.getCoordinates()[0] + other.getBox()[0]/2.0)) && (this.x > (other.getCoordinates()[0] - other.getBox()[0]/2.0))) {
+        if ((this.y < (other.getCoordinates()[1] + other.getBox()[1]/2.0)) && (this.y > (other.getCoordinates()[1] - other.getBox()[1]/2.0))) {
+          return true;
+        }
+        return false;
       }
+      return false;
     }
     return false;
   }
@@ -72,7 +76,7 @@ class Bird extends GameCharacter {
   PImage[] flap = new PImage[2];
   public Bird(float x, float y, float z, int length, int height) {
     super(x, y, z, length, height);
-      frameRate(30);
+    frameRate(30);
   }
   
   void hit() {
@@ -81,28 +85,33 @@ class Bird extends GameCharacter {
   int feed() {
     foodcount++;
     println("FED! " + foodcount);
+    if (foodcount > foodlimit) {
+      fall();
+    }
     return foodcount;
   }
   int starve() {
     foodcount--;
+    if (foodcount < foodlimit) {
+      attack();
+    }
     return foodcount;
   }
   void fall() {
-    if (foodcount > foodlimit) {
-      println("ARGHH! I HAVE FALLEN!");
-    }
+    println("IM FALLING!");
   }
   void attack() {
-    if (foodcount < starvelimit) {
-      // Animation stuff
-    }
+    println("IM MAD!");
   }
   void display() {
+    pushMatrix();
+    translate(x, y, -3000);
     image(flap[frameCount%2], x, y, length, height);
     x = x + vx;
     if (x > width+100) {
       x = -100;
     }
+    popMatrix();
   }
 }
 
@@ -225,10 +234,10 @@ void setup() {
   size(800, 600, P3D);
   birds = new ArrayList<Bird>();
   g = new Gun();
-  d = new Duck(400, 0, -1000, 100, 100);
-  d1 = new Duck(200, 100, -1000, 100, 100);
-  p = new Pelican(300, 100, -1000, 150, 150);
-  p1 = new Pelican(125, 100, -1000, 150, 150);
+  d = new Duck(400, 0, -3000, 1000, 1000);
+  d1 = new Duck(200, 100, -3000, 1000, 1000);
+  p = new Pelican(300, 100, -3000, 1500, 1500);
+  p1 = new Pelican(125, 100, -3000, 1500, 1500);
   //d2 = new Duck(138, 642, -1000, 100, 100);
   //p2 = new Pelican(372, 135, -1000, 150, 150);
   //d3 = new Duck(853, 12, -1000, 100, 100);
