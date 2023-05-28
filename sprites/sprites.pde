@@ -311,12 +311,14 @@ class GameWindow {
       }
     }
     println("Starved birds: " + count + " of " + birdcount);
-    if (count >= birdcount/2) {
+    if (count >= birdcount/2.0) {
       gameOver = true;
       return true;
     }
-    gameOver = false;
-    return false;
+    else {
+      gameOver = false;
+      return false;
+    }
   }
   
   void display() {
@@ -333,6 +335,8 @@ class GameWindow {
     }
     clock.display();
     if ((clock.getTime() % 100 == 0) && !hasSpawned) {
+      spawn((clock.getTime()/100.0));
+      spawn((clock.getTime()/100.0));
       spawn((clock.getTime()/100.0));
       hasSpawned = true;
       for (Bird q : birds) {
