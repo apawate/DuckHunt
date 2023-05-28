@@ -76,7 +76,7 @@ class Bird extends GameCharacter {
   }
   int feed() {
     foodcount++;
-    println("FED! " + name);
+    println("FED! " + name + " " + foodcount);
     if (foodcount > foodlimit) {
       fall();
     }
@@ -91,6 +91,7 @@ class Bird extends GameCharacter {
   }
   void fall() {
     println("IM FALLING!");
+    this.accelerate(0, 10, 0);
   }
   void attack() {
     println("IM MAD!");
@@ -100,6 +101,7 @@ class Bird extends GameCharacter {
     translate(x, y, -3000);
     image(flap[frameCount/5 %2], x, y, length, height);
     x = x + vx;
+    y = y + vy;
     if (x > -1.5 * z) {
       x = 1.5 * z;
     }
