@@ -96,11 +96,11 @@ class Bird extends GameCharacter {
   }
   void display() {
     pushMatrix();
-    //translate(0, 0, z);
+    translate(0, 0, z);
     image(flap[frameCount/6 % 2], x, y, length, height);
     x = x + vx;
-    if (x > width+100) {
-      x = -100;
+    if (x > 400 - 400 * z) {
+      x = 300 + 400*z;
     }
     popMatrix();
   }
@@ -213,21 +213,21 @@ class Gun {
 void setup() {
   size(800, 600, P3D);
   g = new Gun();
-  d = new Duck(0, 0, -3000, 100, 100);
-  d1 = new Duck(100, 100, -1000, 100, 100);
-  p = new Pelican(0, 100, -1000, 100, 100);
-  p1 = new Pelican(125, 100, -1000, 100, 100);
+  d = new Duck(-2000, 0, -2000, 700, 700);
+  d1 = new Duck(-2000, 100, -2000, 700, 700);
+  p = new Pelican(-2000, 100, -2000, 700, 700);
+  p1 = new Pelican(-2000, 100, -2000, 700, 700);
   //d2 = new Duck(138, 642, -1000, 100, 100);
   //p2 = new Pelican(372, 135, -1000, 150, 150);
   //d3 = new Duck(853, 12, -1000, 100, 100);
   //p3 = new Pelican(753, 799, -1000, 150, 150);
   b = new Bread(500, 1000, 0, 150, 150);
-  d.accelerate(8, 0, 0);
-  p.accelerate(5, 0, 0);
-  d1.accelerate(18, 0, 0);
+  d.accelerate(15, 0, 0);
+  p.accelerate(8, 0, 0);
+  d1.accelerate(25, 0, 0);
   //d2.accelerate(10, 0, 0);
   //d3.accelerate(7, 0, 0);
-  p1.accelerate(3, 0, 0);
+  p1.accelerate(6, 0, 0);
   //p2.accelerate(5, 0, 0);
   //p3.accelerate(2, 0, 0);
   g.reload(b);
