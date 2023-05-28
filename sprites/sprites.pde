@@ -72,9 +72,6 @@ class Bird extends GameCharacter {
     super(x, y, z, length, height);
   }
   
-  void hit() {
-    hasFallen = true;
-  }
   int feed() {
     foodcount++;
     println("FED! " + name + " " + foodcount);
@@ -83,14 +80,26 @@ class Bird extends GameCharacter {
     }
     return foodcount;
   }
+  
+  boolean isStarved() {
+    if (foodcount < starvelimit) {
+      return true;
+    }
+    return false;
+  }
+  
+  boolean hasFallen() {
+    return hasFallen;
+  }
   int starve() {
     foodcount--;
-    if (foodcount < foodlimit) {
+    if (foodcount < starvelimit) {
       attack();
     }
     return foodcount;
   }
   void fall() {
+    hasFallen = true;
     println("IM FALLING!");
     this.accelerate(0, 10, 0);
   }
@@ -255,6 +264,7 @@ class GameWindow {
   int score;
   boolean gameOver;
   PImage back;
+  boolean hasSpawned = false;
   public GameWindow() {
     birds = new ArrayList<Bird>();
     d = new Duck(-2000, 0, -2000, 700, 700);
@@ -270,35 +280,68 @@ class GameWindow {
     birds.add(p);
     birds.add(d1);
     birds.add(p1);
-    clock = new Clock(300);
+    clock = new Clock(1);
     back = loadImage("grass.png");
     back.resize(800, 600);
   }
   
-  Bird spawn(int seed) {
+  Bird spawn(float seed) {
     int r = int(random(2));
     if (r == 1) {
-      Duck nu = new Duck(-2000, random(300), -2000, 700, 700);
+      nu = new Duck(-2000, random(300), -2000, 700, 700);
+      nu.accelerate(20 + random(seed), 0, 0);
     }
     else {
-      Pelican nu = new Pelican(-2000, random(300), -2000, 700, 700);
+      nu = new Pelican(-2000, random(300), -2000, 700, 700);
+      nu.accelerate(6 + (random(seed)/3), 0, 0);
     }
-    nu.accelerate(random(seed), 0, 0);
     birds.add(nu);
     return nu;
   }
   
+  boolean hasLost() {
+    int count = 0;
+    int birdcount = 0;
+    for (Bird antone : birds) {
+      if (antone.isStarved() && !antone.hasFallen()) {
+        count++;
+      }
+      if (!antone.hasFallen()) {
+        birdcount++;
+      }
+    }
+    println("Starved birds: " + count + " of " + birdcount);
+    if (count >= birdcount/2) {
+      gameOver = true;
+      return true;
+    }
+    gameOver = false;
+    return false;
+  }
+  
   void display() {
     background(back);
-    for (Bird b : birds) {
-      b.display();
+    if (hasLost()) {
+      println("YOU LOST!");
+    }
+    for (int i = 0; i < birds.size(); i++) {
+      birds.get(i).display();
     }
     g.turn();
     for (Bread a: g.getFired()) {
       a.collision(birds);
     }
     clock.display();
-    
+    if ((clock.getTime() % 100 == 0) && !hasSpawned) {
+      spawn((clock.getTime()/100.0));
+      hasSpawned = true;
+      for (Bird q : birds) {
+        q.starve();
+      }
+    }
+    if ((clock.getTime() % 100 != 0)) {
+      hasSpawned = false;
+    }
   }
   void keyPress(char k) {
     if (k == 'r') {
@@ -311,7 +354,7 @@ class GameWindow {
   }
 }
     
-      class Clock
+class Clock
   {
     int time;
     PFont f;
@@ -324,7 +367,7 @@ class GameWindow {
     void display(){
       if (frameCount % 6 == 0 && time > 0)
       {
-        time = time - 1;
+        time = time + 1;
         fill(0);
         textFont(f, 20);
         
@@ -333,16 +376,19 @@ class GameWindow {
         {
           text("u suck", 700, 150);
         }
-        else
-      text("" + (double)time/10, 700, 150);
-
-        
+     else
+          text("" + (double)time/10, 700, 150);        
     }
-    
+   
     void add(int cent)
     {
       time += cent;
     }
+    
+    int getTime() {
+      return time;
+    }
+    
   }
 
 void setup() {
