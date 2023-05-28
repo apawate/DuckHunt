@@ -76,7 +76,6 @@ class Bird extends GameCharacter {
   PImage[] flap = new PImage[2];
   public Bird(float x, float y, float z, int length, int height) {
     super(x, y, z, length, height);
-    frameRate(30);
   }
   
   void hit() {
@@ -106,10 +105,10 @@ class Bird extends GameCharacter {
   void display() {
     pushMatrix();
     translate(x, y, -3000);
-    image(flap[frameCount%2], x, y, length, height);
+    image(flap[frameCount/5 %2], x, y, length, height);
     x = x + vx;
-    if (x > width+100) {
-      x = -100;
+    if (x > -1.5 * z) {
+      x = 1.5 * z;
     }
     popMatrix();
   }
@@ -148,8 +147,8 @@ class Bread extends GameCharacter {
     void display()
     {
       pushMatrix();
-      translate(x - 200, y - 250, z);
-      image(img,x - 200,y - 250, 50,50);
+      translate(x - 200, y - 300, z);
+      image(img,x - 200,y - 300, 50,50);
       popMatrix();
       x += vx;
       y += vy;
@@ -182,15 +181,7 @@ class Gun {
     return fired;
   }
   void turn() {
-    pushMatrix();
     imageMode(CENTER);
-    translate(width/2, height - 25, 0);
-    if (width/2 != mouseX && mouseX > width/2)
-    rotate(atan((height - mouseY)/(width/2 - mouseX)) + PI/2);
-    if (width/2 != mouseX && mouseX < width/2)
-    rotate(atan((height - mouseY)/(width/2 - mouseX)) + 3 * PI/ 2);
-    image(barrel, 0, 0, 60, 120);
-    popMatrix();
     for (int i = 0; i < fired.size(); i++)
     {
       if (fired.get(i).getz() > -3000)
@@ -199,6 +190,14 @@ class Gun {
       }
       else fired.remove(i);
     }
+    pushMatrix();
+    translate(width/2, height - 25, 0);
+    if (width/2 != mouseX && mouseX > width/2)
+    rotate(atan((height - mouseY)/(width/2 - mouseX)) + PI/2);
+    if (width/2 != mouseX && mouseX < width/2)
+    rotate(atan((height - mouseY)/(width/2 - mouseX)) + 3 * PI/ 2);
+    image(barrel, 0, 0, 60, 120);
+    popMatrix();
     imageMode(CORNER);
   }
   
@@ -234,21 +233,21 @@ void setup() {
   size(800, 600, P3D);
   birds = new ArrayList<Bird>();
   g = new Gun();
-  d = new Duck(400, 0, -3000, 1000, 1000);
-  d1 = new Duck(200, 100, -3000, 1000, 1000);
-  p = new Pelican(300, 100, -3000, 1500, 1500);
-  p1 = new Pelican(125, 100, -3000, 1500, 1500);
+  d = new Duck(-2000, 0, -2000, 700, 700);
+  d1 = new Duck(-2000, 100, -2000, 700, 700);
+  p = new Pelican(-2000, 100, -2000, 700, 700);
+  p1 = new Pelican(-2000, 100, -2000, 700, 700);
   //d2 = new Duck(138, 642, -1000, 100, 100);
   //p2 = new Pelican(372, 135, -1000, 150, 150);
   //d3 = new Duck(853, 12, -1000, 100, 100);
   //p3 = new Pelican(753, 799, -1000, 150, 150);
   b = new Bread(500, 1000, 0, 150, 150);
-  d.accelerate(8, 0, 0);
-  p.accelerate(5, 0, 0);
-  d1.accelerate(18, 0, 0);
+  d.accelerate(18, 0, 0);
+  p.accelerate(8, 0, 0);
+  d1.accelerate(25, 0, 0);
   //d2.accelerate(10, 0, 0);
   //d3.accelerate(7, 0, 0);
-  p1.accelerate(3, 0, 0);
+  p1.accelerate(6, 0, 0);
   //p2.accelerate(5, 0, 0);
   //p3.accelerate(2, 0, 0);
   birds.add(d);
