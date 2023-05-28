@@ -1,11 +1,4 @@
-ArrayList<Bird> birds;
-Duck d;
-Pelican p;
-Bread b;
-Duck d1;
-Pelican p1;
-Gun g;
-float gravity = 0.5;
+GameWindow window;
 class GameCharacter {
   float x;
   float y;
@@ -83,7 +76,7 @@ class Bird extends GameCharacter {
   }
   int feed() {
     foodcount++;
-    println("FED! " + foodcount);
+    println("FED! " + name);
     if (foodcount > foodlimit) {
       fall();
     }
@@ -129,6 +122,7 @@ class Duck extends Bird {
 class Pelican extends Bird {
   public Pelican(float x, float y, float z, int length, int height) {
     super (x, y, z, length, height);
+    name = "Pelican";
     foodlimit = 25;
     name = "Pelican"; // again needs to be changed
     starvelimit = 10;
@@ -140,6 +134,8 @@ class Pelican extends Bird {
 
 class Bread extends GameCharacter {
   PImage img = new PImage();
+  float gravity = 0.5;
+
   public Bread(float x, float y, float z, int length, int height) {
     super(x, y, z, length, height);
     img = loadImage("bread.png");
@@ -225,59 +221,86 @@ class Gun {
     return b;
   }
 }
-    
+
+class GameWindow {
+  ArrayList<Bird> birds;
+  Duck d;
+  Pelican p;
+  Bread b;
+  Duck d1;
+  Pelican p1;
+  Gun g;
+  Bird nu;
+  int timer;
+  int score;
+  boolean gameOver;
+  PImage back;
+  public GameWindow() {
+    birds = new ArrayList<Bird>();
+    d = new Duck(-2000, 0, -2000, 700, 700);
+    d1 = new Duck(-2000, 100, -2000, 700, 700);
+    p = new Pelican(-2000, 100, -2000, 700, 700);
+    p1 = new Pelican(-2000, 100, -2000, 700, 700);
+    g = new Gun();
+    b = new Bread(500, 1000, 0, 150, 150);
+    d.accelerate(18, 0, 0);
+    p.accelerate(8, 0, 0);
+    d1.accelerate(25, 0, 0);
+    p1.accelerate(6, 0, 0);
+    birds.add(d);
+    birds.add(p);
+    birds.add(d1);
+    birds.add(p1);
+    g.reload(b);
+    back = loadImage("grass.png");
+    back.resize(800, 600);
+  }
+  
+  Bird spawn(int seed) {
+    int r = int(random(2));
+    if (r == 1) {
+      Duck nu = new Duck(-2000, random(300), -2000, 700, 700);
+    }
+    else {
+      Pelican nu = new Pelican(-2000, random(300), -2000, 700, 700);
+    }
+    nu.accelerate(random(seed), 0, 0);
+    birds.add(nu);
+    return nu;
+  }
+  
+  void display() {
+    background(back);
+    for (Bird b : birds) {
+      b.display();
+    }
+    g.turn();
+    for (Bread a: g.getFired()) {
+      a.collision(birds);
+    }
+  }
+  void keyPress(char k) {
+    if (k == 'r') {
+      g.reload();
+    }
+    else {
+      g.fire();
+    }
+    display();
+  }
+}
     
     
 
 void setup() {
   size(800, 600, P3D);
-  birds = new ArrayList<Bird>();
-  g = new Gun();
-  d = new Duck(-2000, 0, -2000, 700, 700);
-  d1 = new Duck(-2000, 100, -2000, 700, 700);
-  p = new Pelican(-2000, 100, -2000, 700, 700);
-  p1 = new Pelican(-2000, 100, -2000, 700, 700);
-  //d2 = new Duck(138, 642, -1000, 100, 100);
-  //p2 = new Pelican(372, 135, -1000, 150, 150);
-  //d3 = new Duck(853, 12, -1000, 100, 100);
-  //p3 = new Pelican(753, 799, -1000, 150, 150);
-  b = new Bread(500, 1000, 0, 150, 150);
-  d.accelerate(18, 0, 0);
-  p.accelerate(8, 0, 0);
-  d1.accelerate(25, 0, 0);
-  //d2.accelerate(10, 0, 0);
-  //d3.accelerate(7, 0, 0);
-  p1.accelerate(6, 0, 0);
-  //p2.accelerate(5, 0, 0);
-  //p3.accelerate(2, 0, 0);
-  birds.add(d);
-  birds.add(p);
-  birds.add(d1);
-  birds.add(p1);
-  g.reload(b);
+  window = new GameWindow();
 
 }
 void draw() {
-  PImage img;
-  img = loadImage("grass.png");
-  img.resize(800,600);
-  background(img);
-  d.display();
-  p.display();
-  d1.display();
-  p1.display();
-  g.turn();
-  for (Bread b : g.getFired()) {
-    b.collision(birds);
-  }
+  window.display();
 }
 
 void keyPressed() {
-  if (key == 'r') {
-    g.reload();
-  }
-  else {
-    g.fire();
-  }
-  println(g.fired.size());
+  window.keyPress(key);
 }
