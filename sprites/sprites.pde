@@ -1,3 +1,4 @@
+import java.util.*;
 GameWindow window;
 class GameCharacter {
   float x;
@@ -71,6 +72,9 @@ class Bird extends GameCharacter {
     super(x, y, z, length, height);
   }
   
+  void hit() {
+    hasFallen = true;
+  }
   int feed() {
     foodcount++;
     println("FED! " + name + " " + foodcount);
@@ -89,13 +93,9 @@ class Bird extends GameCharacter {
   void fall() {
     println("IM FALLING!");
     this.accelerate(0, 10, 0);
-    hasFallen = true;
   }
   void attack() {
     println("IM MAD!");
-  }
-  boolean hasFallen() {
-    return hasFallen;
   }
   void display() {
     pushMatrix();
@@ -147,7 +147,7 @@ class Bread extends GameCharacter {
     {
       pushMatrix();
       translate(x - 200, y - 300, z);
-      image(img,x - 200,y - 300, 50,50);
+      image(img,x - 200,y - 300, length, height);
       popMatrix();
       x += vx;
       y += vy;
@@ -165,16 +165,24 @@ class Bread extends GameCharacter {
   }
 
 class Gun {
+      PFont f;
+
   PImage barrel = new PImage();
-  ArrayList<Bread> ammo;
+  Queue<Bread> ammo;
   ArrayList<Bread> fired;
   float x = width/2;
   float y = height ;
   float z = 0;
   public Gun() {
     barrel = loadImage("gun.png");
-    ammo = new ArrayList<Bread>();
+    ammo = new LinkedList<Bread>();
     fired = new ArrayList<Bread>();
+        f = createFont("Arial", 16, true);
+    while (ammo.size() < 9)
+    {
+      ammo.add(new Bread(x, y, 0, 50, 50));
+  }
+  ammo.add(new Bread(x, y, 0, 150, 150));
   }
   ArrayList<Bread> getFired() {
     return fired;
@@ -198,6 +206,9 @@ class Gun {
     image(barrel, 0, 0, 60, 120);
     popMatrix();
     imageMode(CORNER);
+    fill(0);
+    textFont(f, 20);
+    text(ammo.size(), 700, 100);
   }
   
   
@@ -206,14 +217,20 @@ class Gun {
   }
   
   void reload() {
+    ammo.clear();
+    while (ammo.size() < 9)
+    {
     ammo.add(new Bread(x, y, 0, 50, 50));
+    }
+    if (ammo.size() == 9)
+    ammo.add(new Bread(x, y, 0, 150, 150));
   }
   
   Bread fire() {
     if (ammo.size() == 0) {
       return null;
     }
-    Bread b = ammo.remove(0);
+    Bread b = ammo.remove();
     float targetX = mouseX;
     float targetY = mouseY;
     float vy = -(targetY - height)*(targetY - height)/7500;
@@ -233,8 +250,8 @@ class GameWindow {
   Duck d1;
   Pelican p1;
   Gun g;
+  Clock clock;
   Bird nu;
-  int timer;
   int score;
   boolean gameOver;
   PImage back;
@@ -253,8 +270,7 @@ class GameWindow {
     birds.add(p);
     birds.add(d1);
     birds.add(p1);
-    for (int i = 0; i < 10; i++)
-      g.reload();
+    clock = new Clock(300);
     back = loadImage("grass.png");
     back.resize(800, 600);
   }
@@ -274,9 +290,6 @@ class GameWindow {
   
   void display() {
     background(back);
-    if (hasWon()) {
-      println("YOU WON!");
-    }
     for (Bird b : birds) {
       b.display();
     }
@@ -284,6 +297,8 @@ class GameWindow {
     for (Bread a: g.getFired()) {
       a.collision(birds);
     }
+    clock.display();
+    
   }
   void keyPress(char k) {
     if (k == 'r') {
@@ -294,18 +309,41 @@ class GameWindow {
     }
     display();
   }
-  boolean hasWon() {
-    boolean haswon = true;
-    for (Bird asdf : birds) {
-      if (!asdf.hasFallen()) {
-        haswon = false;
-      }
-    }
-    return haswon;
-  }
 }
     
+      class Clock
+  {
+    int time;
+    PFont f;
+    public Clock (int start)
+    {
+      f = createFont("Palatino", 20, true);
+      time = start;
+    }
     
+    void display(){
+      if (frameCount % 6 == 0 && time > 0)
+      {
+        time = time - 1;
+        fill(0);
+        textFont(f, 20);
+        
+      }
+     if (time == 0)
+        {
+          text("u suck", 700, 150);
+        }
+        else
+      text("" + (double)time/10, 700, 150);
+
+        
+    }
+    
+    void add(int cent)
+    {
+      time += cent;
+    }
+  }
 
 void setup() {
   size(800, 600, P3D);
