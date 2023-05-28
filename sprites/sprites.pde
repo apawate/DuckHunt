@@ -95,7 +95,7 @@ class Bird extends GameCharacter {
     println("IM MAD!");
   }
   boolean hasFallen() {
-    return hasFallen();
+    return hasFallen;
   }
   void display() {
     pushMatrix();
@@ -274,6 +274,9 @@ class GameWindow {
   
   void display() {
     background(back);
+    if (hasWon()) {
+      println("YOU WON!");
+    }
     for (Bird b : birds) {
       b.display();
     }
