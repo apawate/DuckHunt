@@ -273,8 +273,11 @@ void draw() {
 }
 
 void keyPressed() {
-  g.reload();
-  g.reload();
-  g.fire();
+  if (key == 'r') {
+    g.reload();
+  }
+  else {
+    g.fire();
+  }
   println(g.fired.size());
 }
