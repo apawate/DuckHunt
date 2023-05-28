@@ -99,8 +99,8 @@ class Bird extends GameCharacter {
     translate(0, 0, z);
     image(flap[frameCount/6 % 2], x, y, length, height);
     x = x + vx;
-    if (x > 400 - 400 * z) {
-      x = 300 + 400*z;
+    if (x > - 1.5 * z) {
+      x = 1.5 * z;
     }
     popMatrix();
   }
