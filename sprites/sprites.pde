@@ -71,9 +71,6 @@ class Bird extends GameCharacter {
     super(x, y, z, length, height);
   }
   
-  void hit() {
-    hasFallen = true;
-  }
   int feed() {
     foodcount++;
     println("FED! " + name + " " + foodcount);
@@ -92,9 +89,13 @@ class Bird extends GameCharacter {
   void fall() {
     println("IM FALLING!");
     this.accelerate(0, 10, 0);
+    hasFallen = true;
   }
   void attack() {
     println("IM MAD!");
+  }
+  boolean hasFallen() {
+    return hasFallen();
   }
   void display() {
     pushMatrix();
@@ -244,7 +245,6 @@ class GameWindow {
     p = new Pelican(-2000, 100, -2000, 700, 700);
     p1 = new Pelican(-2000, 100, -2000, 700, 700);
     g = new Gun();
-    b = new Bread(500, 1000, 0, 150, 150);
     d.accelerate(18, 0, 0);
     p.accelerate(8, 0, 0);
     d1.accelerate(25, 0, 0);
@@ -253,7 +253,8 @@ class GameWindow {
     birds.add(p);
     birds.add(d1);
     birds.add(p1);
-    g.reload(b);
+    for (int i = 0; i < 10; i++)
+      g.reload();
     back = loadImage("grass.png");
     back.resize(800, 600);
   }
@@ -289,6 +290,15 @@ class GameWindow {
       g.fire();
     }
     display();
+  }
+  boolean hasWon() {
+    boolean haswon = true;
+    for (Bird asdf : birds) {
+      if (!asdf.hasFallen()) {
+        haswon = false;
+      }
+    }
+    return haswon;
   }
 }
     
