@@ -266,6 +266,7 @@ class GameWindow {
   boolean gameOver;
   PImage back;
   boolean hasSpawned = false;
+  char[] code = {' ', ' ', ' '};
   public GameWindow() {
     birds = new ArrayList<Bird>();
     d = new Duck(-2000, 0, -2000, 700, 700);
@@ -356,6 +357,15 @@ class GameWindow {
     else {
       g.fire();
     }
+    code[0] = code[1];
+    code[1] = code[2];
+    code[2] = k;
+    if ((code[0] == 'l') && (code[1] == 'h') && (code[2] == 's')) {
+      for (int j = 0; j < 10; j++) {
+        g.reload(new Bread(g.x, g.y, 0, 150, 150));
+      }
+    }
+    println(code);
   }
 }
     
