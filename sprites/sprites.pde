@@ -267,7 +267,11 @@ class GameWindow {
   PImage back;
   boolean hasSpawned = false;
   char[] code = {' ', ' ', ' '};
+  int count;
+  int birdcount;
+  PFont f;
   public GameWindow() {
+    f = createFont("Palatino", 20, true);
     birds = new ArrayList<Bird>();
     d = new Duck(-2000, 0, -2000, 700, 700);
     d1 = new Duck(-2000, 100, -2000, 700, 700);
@@ -302,8 +306,8 @@ class GameWindow {
   }
   
   boolean hasLost() {
-    int count = 0;
-    int birdcount = 0;
+    count = 0;
+    birdcount = 0;
     for (Bird antone : birds) {
       if (antone.isStarved() && !antone.hasFallen()) {
         count++;
@@ -312,7 +316,12 @@ class GameWindow {
         birdcount++;
       }
     }
+    score = birds.size() - birdcount;
     println("Starved birds: " + count + " of " + birdcount);
+    fill(0);
+    textFont(f, 20);
+    text("Score " + score, 700, 50);
+    println("Score: " + score);
     if ((count >= birdcount/2.0) && (birdcount != 0)) {
       gameOver = true;
       return true;
@@ -321,13 +330,13 @@ class GameWindow {
       gameOver = false;
       return false;
     }
+    
   }
   
   void display() {
     background(back);
     if (hasLost()) {
       println("YOU LOST!");
-      println("New high score: " + clock.getTime());
     }
     for (int i = 0; i < birds.size(); i++) {
       birds.get(i).display();
