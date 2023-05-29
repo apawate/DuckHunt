@@ -370,6 +370,8 @@ class GameWindow {
     code[1] = code[2];
     code[2] = k;
     if ((code[0] == 'l') && (code[1] == 'h') && (code[2] == 's')) {
+      textFont(f, 100);
+      text("MEGABREAD!", 0, 400);
       for (int j = 0; j < 10; j++) {
         g.reload(new Bread(g.x, g.y, 0, 150, 150));
       }
