@@ -227,12 +227,13 @@ class Gun {
   
   void reload() {
     ammo.clear();
-    while (ammo.size() < 9)
+    while (ammo.size() < 10)
     {
     ammo.add(new Bread(x, y, 0, 50, 50));
     }
-    if (ammo.size() == 9)
-    ammo.add(new Bread(x, y, 0, 150, 150));
+    // Megabread
+    //if (ammo.size() == 9)
+    //ammo.add(new Bread(x, y, 0, 150, 150));
   }
   
   Bread fire() {
@@ -311,7 +312,7 @@ class GameWindow {
       }
     }
     println("Starved birds: " + count + " of " + birdcount);
-    if (count >= birdcount/2.0) {
+    if ((count >= birdcount/2.0) && (birdcount != 0)) {
       gameOver = true;
       return true;
     }
@@ -325,6 +326,7 @@ class GameWindow {
     background(back);
     if (hasLost()) {
       println("YOU LOST!");
+      println("New high score: " + clock.getTime());
     }
     for (int i = 0; i < birds.size(); i++) {
       birds.get(i).display();
@@ -354,7 +356,6 @@ class GameWindow {
     else {
       g.fire();
     }
-    display();
   }
 }
     
