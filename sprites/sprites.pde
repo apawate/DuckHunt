@@ -186,7 +186,7 @@ class Gun {
     barrel = loadImage("gun.png");
     ammo = new LinkedList<Bread>();
     fired = new ArrayList<Bread>();
-        f = createFont("Arial", 16, true);
+    f = createFont("Palatino", 16, true);
     while (ammo.size() < 9)
     {
       ammo.add(new Bread(x, y, 0, 50, 50));
@@ -217,7 +217,7 @@ class Gun {
     imageMode(CORNER);
     fill(0);
     textFont(f, 20);
-    text(ammo.size(), 700, 100);
+    text("Ammo " + ammo.size(), 690, 100);
   }
   
   
@@ -320,7 +320,7 @@ class GameWindow {
     println("Starved birds: " + count + " of " + birdcount);
     fill(0);
     textFont(f, 20);
-    text("Score " + score, 700, 50);
+    text("Score " + score, 690, 50);
     println("Score: " + score);
     if ((count >= birdcount/2.0) && (birdcount != 0)) {
       gameOver = true;
@@ -396,12 +396,7 @@ class Clock
         textFont(f, 20);
         
       }
-     if (time == 0)
-        {
-          text("u suck", 700, 150);
-        }
-     else
-          text("" + (double)time/10, 700, 150);        
+      text("Time: " + (double)time/10, 690, 150);   
     }
    
     void add(int cent)
