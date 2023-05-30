@@ -1,4 +1,6 @@
 import java.util.*;
+import processing.sound.*;
+SoundFile soundtrack;
 GameWindow window;
 class GameCharacter {
   float x;
@@ -64,6 +66,7 @@ class GameCharacter {
 class Bird extends GameCharacter {
   int foodcount;
   String name;
+  SoundFile die;
   boolean hasFallen;
   int foodlimit;
   int starvelimit;
@@ -71,6 +74,7 @@ class Bird extends GameCharacter {
   PImage[] flop = new PImage[2];
   public Bird(float x, float y, float z, int length, int height) {
     super(x, y, z, length, height);
+    die = new SoundFile(this, "bird.wav");
   }
   
   int feed() {
@@ -115,6 +119,9 @@ class Bird extends GameCharacter {
     }
     else {
       image(flap[frameCount/5 %2], x, y, length, height);
+    }
+    if (foodcount > foodlimit) {
+      die.play();
     }
     x = x + vx;
     y = y + vy;
