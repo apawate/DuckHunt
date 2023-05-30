@@ -68,6 +68,7 @@ class Bird extends GameCharacter {
   int foodlimit;
   int starvelimit;
   PImage[] flap = new PImage[2];
+  PImage[] flop = new PImage[2];
   public Bird(float x, float y, float z, int length, int height) {
     super(x, y, z, length, height);
   }
@@ -109,7 +110,12 @@ class Bird extends GameCharacter {
   void display() {
     pushMatrix();
     translate(x, y, -3000);
-    image(flap[frameCount/5 %2], x, y, length, height);
+    if (foodcount < starvelimit) {
+      image(flop[frameCount/5 %2], x, y, length, height);
+    }
+    else {
+      image(flap[frameCount/5 %2], x, y, length, height);
+    }
     x = x + vx;
     y = y + vy;
     if (x > -1.5 * z) {
@@ -128,6 +134,8 @@ class Duck extends Bird {
     foodcount = 10;
     flap[0] = loadImage("duck0.png");
     flap[1] = loadImage("duck1.png");
+    flop[0] = loadImage("ducktint0.png");
+    flop[1] = loadImage("ducktint1.png");
   }
 }
 
@@ -141,6 +149,8 @@ class Pelican extends Bird {
     foodcount = 15;
     flap[0] = loadImage("pelican0.png");
     flap[1] = loadImage("pelican1.png");
+    flop[0] = loadImage("pelicantint0.png");
+    flop[1] = loadImage("pelicantint1.png");
   }
 }
 
@@ -346,16 +356,17 @@ class GameWindow {
       a.collision(birds);
     }
     clock.display();
-    if ((clock.getTime() % 100 == 0) && !hasSpawned) {
+    if ((clock.getTime() % 50 == 0) && !hasSpawned) {
       spawn((clock.getTime()/100.0));
       spawn((clock.getTime()/100.0));
       spawn((clock.getTime()/100.0));
       hasSpawned = true;
       for (Bird q : birds) {
         q.starve();
+        q.starve();
       }
     }
-    if ((clock.getTime() % 100 != 0)) {
+    if ((clock.getTime() % 50 != 0)) {
       hasSpawned = false;
     }
   }
@@ -370,8 +381,6 @@ class GameWindow {
     code[1] = code[2];
     code[2] = k;
     if ((code[0] == 'l') && (code[1] == 'h') && (code[2] == 's')) {
-      textFont(f, 100);
-      text("MEGABREAD!", 0, 400);
       for (int j = 0; j < 10; j++) {
         g.reload(new Bread(g.x, g.y, 0, 150, 150));
       }
