@@ -1,6 +1,4 @@
 import java.util.*;
-import processing.sound.*;
-SoundFile soundtrack;
 GameWindow window;
 class GameCharacter {
   float x;
