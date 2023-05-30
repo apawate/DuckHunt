@@ -273,7 +273,7 @@ class GameWindow {
   Clock clock;
   Bird nu;
   int score;
-  boolean gameOver;
+  boolean gameOver = false;
   PImage back;
   boolean hasSpawned = false;
   char[] code = {' ', ' ', ' '};
@@ -327,17 +327,16 @@ class GameWindow {
       }
     }
     score = birds.size() - birdcount;
-    println("Starved birds: " + count + " of " + birdcount);
     fill(0);
     textFont(f, 20);
     text("Score " + score, 690, 50);
+    text("Starved birds: " + count + " of " + birdcount, 580, 200);
     println("Score: " + score);
     if ((count >= birdcount/2.0) && (birdcount != 0)) {
       gameOver = true;
       return true;
     }
     else {
-      gameOver = false;
       return false;
     }
     
@@ -345,9 +344,12 @@ class GameWindow {
   
   void display() {
     background(back);
-    if (hasLost()) {
-      println("YOU LOST!");
+    if (hasLost() && gameOver) {
+      textFont(f, 50);
+      text("GAME OVER!!", 30, 400);
+
     }
+    else {
     for (int i = 0; i < birds.size(); i++) {
       birds.get(i).display();
     }
@@ -368,6 +370,7 @@ class GameWindow {
     }
     if ((clock.getTime() % 50 != 0)) {
       hasSpawned = false;
+    }
     }
   }
   void keyPress(char k) {
