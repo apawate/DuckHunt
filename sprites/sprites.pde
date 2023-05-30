@@ -74,13 +74,11 @@ class Bird extends GameCharacter {
   PImage[] flop = new PImage[2];
   public Bird(float x, float y, float z, int length, int height) {
     super(x, y, z, length, height);
-    die = new SoundFile(this, "bird.wav");
   }
   
   int feed() {
     foodcount++;
     println("FED! " + name + " " + foodcount);
-    die.play();
     if (foodcount > foodlimit) {
       fall();
     }
@@ -432,8 +430,8 @@ class Clock
 void setup() {
   size(800, 600, P3D);
   window = new GameWindow();
-  soundtrack = new SoundFile(this, "biggest.mp3");
-  soundtrack.loop();
+  //soundtrack = new SoundFile(this, "biggest.mp3");
+  //soundtrack.loop();
 
 }
 void draw() {
