@@ -80,6 +80,7 @@ class Bird extends GameCharacter {
   int feed() {
     foodcount++;
     println("FED! " + name + " " + foodcount);
+    die.play();
     if (foodcount > foodlimit) {
       fall();
     }
@@ -119,9 +120,6 @@ class Bird extends GameCharacter {
     }
     else {
       image(flap[frameCount/5 %2], x, y, length, height);
-    }
-    if (foodcount > foodlimit) {
-      die.play();
     }
     x = x + vx;
     y = y + vy;
@@ -434,6 +432,8 @@ class Clock
 void setup() {
   size(800, 600, P3D);
   window = new GameWindow();
+  soundtrack = new SoundFile(this, "biggest.mp3");
+  soundtrack.loop();
 
 }
 void draw() {
