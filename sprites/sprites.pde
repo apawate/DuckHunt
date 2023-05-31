@@ -337,7 +337,7 @@ class GameWindow {
     text("Score " + score, 690, 50);
     text("Starved birds: " + count + " of " + birdcount, 550, 200);
     println("Score: " + score);
-    if ((count >= birdcount/2.0) && (birdcount != 0)) {
+    if ((count >= birdcount/2.0) && (birdcount > 20)) {
       gameOver = true;
       return true;
     }
