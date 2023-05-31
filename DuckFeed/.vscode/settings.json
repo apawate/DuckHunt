@@ -1,0 +1,11 @@
+{
+    "java.project.referencedLibraries": [
+        "lib/**/*.jar",
+        "/home/agastya/Desktop/School/11th grade/APCSA/core.jar",
+        "/home/agastya/Desktop/School/11th grade/APCSA/jogl-all.jar",
+        "/home/agastya/Desktop/School/11th grade/APCSA/gluegen-rt.jar",
+        "/home/agastya/Desktop/School/11th grade/APCSA/jogl-all-natives-linux-amd64.jar",
+        "/home/agastya/Desktop/School/11th grade/APCSA/gluegen-rt-natives-linux-amd64.jar",
+        "/home/agastya/Desktop/School/11th grade/APCSA/sound.jar"
+    ]
+}
