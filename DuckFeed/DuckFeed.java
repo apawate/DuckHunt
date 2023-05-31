@@ -1,3 +1,12 @@
+/**
+ * Duck Feeding - a game where the player takes down ducks and pelicans by feeding them bread from a bread gun until they are too full to fly.
+ * @author Agastya Pawate
+ * @author Antone Jung
+ * @author Nicholas Lee
+ * @author Caius Leung
+ * @version 5/31/2023
+ */
+
 import processing.core.*; 
 import processing.data.*; 
 import processing.event.*; 
@@ -14,6 +23,14 @@ import java.io.PrintWriter;
 import java.io.InputStream; 
 import java.io.OutputStream; 
 import java.io.IOException; 
+
+/**
+ * Encapsulates all the classes and methods of the game and extends PApplet to facilitate Processing implementation.
+ * @author Agastya Pawate
+ * @author Antone Jung
+ * @author Nicholas Lee
+ * @author Caius Leung
+ */
 
 public class DuckFeed extends PApplet {
 
