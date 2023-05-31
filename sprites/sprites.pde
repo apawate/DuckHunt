@@ -64,6 +64,7 @@ class GameCharacter {
 class Bird extends GameCharacter {
   int foodcount;
   String name;
+  SoundFile die;
   boolean hasFallen;
   int foodlimit;
   int starvelimit;
@@ -427,6 +428,8 @@ class Clock
 void setup() {
   size(800, 600, P3D);
   window = new GameWindow();
+  //soundtrack = new SoundFile(this, "biggest.mp3");
+  //soundtrack.loop();
 
 }
 void draw() {
