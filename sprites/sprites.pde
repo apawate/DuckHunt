@@ -1,4 +1,8 @@
 import java.util.*;
+import processing.sound.*;
+SoundFile soundtrack;
+SoundFile die;
+
 GameWindow window;
 class GameCharacter {
   float x;
@@ -64,7 +68,6 @@ class GameCharacter {
 class Bird extends GameCharacter {
   int foodcount;
   String name;
-  SoundFile die;
   boolean hasFallen;
   int foodlimit;
   int starvelimit;
@@ -77,7 +80,7 @@ class Bird extends GameCharacter {
   int feed() {
     foodcount++;
     println("FED! " + name + " " + foodcount);
-    if (foodcount > foodlimit) {
+    if ((foodcount > foodlimit) && !hasFallen) {
       fall();
     }
     return foodcount;
@@ -104,6 +107,7 @@ class Bird extends GameCharacter {
     hasFallen = true;
     println("IM FALLING!");
     this.accelerate(0, 10, 0);
+    die.play();
   }
   void attack() {
     println("IM MAD!");
@@ -331,7 +335,7 @@ class GameWindow {
     fill(0);
     textFont(f, 20);
     text("Score " + score, 690, 50);
-    text("Starved birds: " + count + " of " + birdcount, 580, 200);
+    text("Starved birds: " + count + " of " + birdcount, 550, 200);
     println("Score: " + score);
     if ((count >= birdcount/2.0) && (birdcount != 0)) {
       gameOver = true;
@@ -428,8 +432,10 @@ class Clock
 void setup() {
   size(800, 600, P3D);
   window = new GameWindow();
-  //soundtrack = new SoundFile(this, "biggest.mp3");
-  //soundtrack.loop();
+  soundtrack = new SoundFile(this, "biggest.wav");
+  die = new SoundFile(this, "bird.wav");
+  soundtrack.amp(0.25);
+  soundtrack.loop();
 
 }
 void draw() {
