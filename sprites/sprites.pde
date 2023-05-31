@@ -4,6 +4,9 @@ SoundFile soundtrack;
 SoundFile die;
 
 GameWindow window;
+/** Represents a single game character in DuckFeed with a position, velocity, collision detection and display method.
+ * @author Agastya Pawate
+ */
 class GameCharacter {
   float x;
   float y;
@@ -13,6 +16,14 @@ class GameCharacter {
   float vz;
   int length;
   int height;
+  /** Creates a given game character with initial position and hitbox size.
+   * 
+   * @param x The x-position of the character.
+   * @param y The y-position of the character.
+   * @param z The z-position of the character.
+   * @param length The length of the character's hitbox (the smallest box containing them on screen).
+   * @param height The height of the character's hitbox (the smallest box containing them on screen).
+   */
   public GameCharacter(float x, float y, float z, int length, int height) {
     this.x = x;
     this.y = y;
@@ -24,20 +35,35 @@ class GameCharacter {
     this.height = height;
   }
   
+  /** Gets the current coordinates of the character.
+   * @return float[] retval containing the x, y and z coordinates of the character. 
+   */
   public float[] getCoordinates() {
     float[] retval = {x, y, z};
     return retval;
   }
+  
+  /** Gets the hitbox of the character.
+   * @return int[] retval containing the length and height of the hitbox.
+   */
   
   public int[] getBox() {
     int[] retval = {length, height};
     return retval;
   }
   
+  /** Gets the z-coordinate (3D depth) of the character.
+   * @return z the z coordinate of the character.
+   */
   public float getz()
   {
     return z;
   }
+  
+  /** Decides if this object has collided with the other object (whether the hitboxes overlap).
+   * @param other The other GameCharacter.
+   * @return A boolean describing if the two objects have collided or not.
+   */
   
   boolean hasCollided(GameCharacter other) {
     if (this.z == other.getCoordinates()[2]) {
@@ -52,11 +78,17 @@ class GameCharacter {
     return false;
   }
   
+  /** Instantaneously accelerates or decelerates the object.
+   * @param changex The change in x-velocity.
+   * @param changey The change in y-velocity.
+   * @param changez The change in z-velocity.
+   */
   void accelerate(float changex, float changey, float changez) {
     vx = vx + changex;
     vy = vy + changey;
     vz = vz + changez;
   }
+  /** Updates the character's position according to velocity values. */
   void display() {
     x = x + vx;
     y = y + vy;
