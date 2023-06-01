@@ -97,6 +97,11 @@ class GameCharacter {
   }
 }
 
+/**
+ * Represents a bird in the game. Extends GameCharacter.
+ * @author Agastya Pawate
+ * @author Caius Leung
+ */
 class Bird extends GameCharacter {
   int foodcount;
   String name;
