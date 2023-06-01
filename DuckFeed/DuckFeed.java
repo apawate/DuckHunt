@@ -91,8 +91,8 @@ class GameCharacter {
   
   public boolean hasCollided(GameCharacter other) {
     if (this.z == other.getCoordinates()[2]) {
-      if ((this.x < (other.getCoordinates()[0] + other.getBox()[0]/2.0f)) && (this.x > (other.getCoordinates()[0] - other.getBox()[0]/2.0f))) {
-        if ((this.y < (other.getCoordinates()[1] + other.getBox()[1]/2.0f)) && (this.y > (other.getCoordinates()[1] - other.getBox()[1]/2.0f))) {
+      if ((this.x - this.length / 2 < (other.getCoordinates()[0] + other.getBox()[0]/2.0)) && (this.x  + this.length / 2 > (other.getCoordinates()[0] - other.getBox()[0]/2.0))) {
+        if ((this.y - this.height / 2 < (other.getCoordinates()[1] + other.getBox()[1]/2.0)) && (this.y + this.height / 2 > (other.getCoordinates()[1] - other.getBox()[1]/2.0))) {
           return true;
         }
         return false;
@@ -317,8 +317,39 @@ class Gun {
   }
 }
 
+  class Player implements Comparable<Player>{
+  String user;
+  Integer score;
+  
+  public Player (String u, Integer i)
+  {
+    user = u;
+    score = i;
+  }
+  
+  public Integer score ()
+  {
+    return score;
+  }
+  
+  public String user()
+  {
+    return user;
+  }
+  
+  public int compareTo(Player other)
+  {
+    return other.score() - score();
+  }
+}
+  
 class GameWindow {
+  boolean added;
+  String typing;
+  String currentPlayer;
   ArrayList<Bird> birds;
+  HashMap<String, Integer> players;
+  PriorityQueue<Player> scoreboard;
   Duck d;
   Pelican p;
   Bread b;
@@ -328,7 +359,8 @@ class GameWindow {
   Clock clock;
   Bird nu;
   int score;
-  boolean gameOver = false;
+  boolean gameOver;
+  boolean gameStart;
   PImage back;
   boolean hasSpawned = false;
   char[] code = {' ', ' ', ' '};
@@ -336,34 +368,49 @@ class GameWindow {
   int birdcount;
   PFont f;
   public GameWindow() {
+    added = false;
+    typing = "";
+    currentPlayer = "";
+    players = new HashMap<String, Integer>();
+    scoreboard = new PriorityQueue<Player>();
     f = createFont("Palatino", 20, true);
     birds = new ArrayList<Bird>();
-    d = new Duck(-2000, 0, -2000, 700, 700);
-    d1 = new Duck(-2000, 100, -2000, 700, 700);
-    p = new Pelican(-2000, 100, -2000, 700, 700);
-    p1 = new Pelican(-2000, 100, -2000, 700, 700);
-    g = new Gun();
-    d.accelerate(18, 0, 0);
-    p.accelerate(8, 0, 0);
-    d1.accelerate(25, 0, 0);
-    p1.accelerate(6, 0, 0);
-    birds.add(d);
-    birds.add(p);
-    birds.add(d1);
-    birds.add(p1);
-    clock = new Clock(1);
+    gameStart = false;
     back = loadImage("grass.png");
     back.resize(800, 600);
   }
   
+  public void   void start() {
+    birds.clear();
+    birds.add(spawn(0));
+    birds.add(spawn(0));
+    birds.add(spawn(0));
+    birds.add(spawn(0));
+    g = new Gun();
+    clock = new Clock(1);
+  }
+  
+  public void mousePress() {
+    if (!gameStart)
+    {
+      gameStart = true;
+      start();
+    }
+    else if (gameOver)
+    {
+      gameStart = false;
+      gameOver = false;
+    }
+  }
+  
   public Bird spawn(float seed) {
-    int r = PApplet.parseInt(random(2));
+    int r = int(random(2));
     if (r == 1) {
-      nu = new Duck(-2000, random(300), -2000, 700, 700);
-      nu.accelerate(20 + random(seed), 0, 0);
+      nu = new Duck(-2000, random(1000) - 800, -2000, 700, 700);
+      nu.accelerate(16 + random(seed), 0, 0);
     }
     else {
-      nu = new Pelican(-2000, random(300), -2000, 700, 700);
+      nu = new Pelican(-2000, random(1000) - 800, -2000, 700, 700);
       nu.accelerate(6 + (random(seed)/3), 0, 0);
     }
     birds.add(nu);
@@ -399,12 +446,43 @@ class GameWindow {
   
   public void display() {
     background(back);
-    if (hasLost() && gameOver) {
+    if (!gameStart) {
+      fill(0);
       textFont(f, 50);
-      text("GAME OVER!!", 30, 400);
-
-    }
-    else {
+      text("DUCK FEED", 300, 200);
+      textFont(f, 20);
+      text("Enter Username: " + typing, 300, 300);
+      text("Current Player: " + currentPlayer, 300, 320);
+      text("*Click to Start*", 300, 500);
+      scoreboard.clear();
+      added = false;
+    } else if (hasLost() && gameOver) {
+      textFont(f, 50);
+      text("GAME OVER!!", 300, 150);
+      if (!added)
+      {
+        players.putIfAbsent(currentPlayer, score);
+        if (score > players.get(currentPlayer))
+        players.replace(currentPlayer, score);
+        for (HashMap.Entry<String, Integer> entry : players.entrySet())
+        {
+         scoreboard.add(new Player(entry.getKey(), entry.getValue())); 
+        }
+         added = true; 
+      }
+      Iterator<Player> iter = scoreboard.iterator();
+      int i = 0;
+      while (iter.hasNext() && i <= 4)
+      {
+         i++;
+        Player p = iter.next();
+        textFont(f, 20);
+        text("Scoreboard (top 5): ", 300, 250);
+        text(i + ". " + p.user() + " " + p.score, 300, 250 + 30 * i);
+      }
+      text("*Click to Restart*", 300, 500);
+    } else {
+      text("Player: " + currentPlayer, 600, 230);
     for (int i = 0; i < birds.size(); i++) {
       birds.get(i).display();
     }
@@ -428,7 +506,22 @@ class GameWindow {
     }
     }
   }
+  
   public void keyPress(char k) {
+    if (!gameStart)
+    {
+      if (key == '\n')
+      {
+        currentPlayer = typing;
+        typing = "";
+      } else if (key == BACKSPACE && typing.length() > 0)
+      {
+        typing = typing.substring(0, typing.length() - 1);
+      }
+      else {
+        typing = typing + key;
+      }
+    } else {
     if (k == 'r') {
       g.reload();
     }
@@ -439,12 +532,15 @@ class GameWindow {
     code[1] = code[2];
     code[2] = k;
     if ((code[0] == 'l') && (code[1] == 'h') && (code[2] == 's')) {
+      textFont(f, 100);
+      text("MEGABREAD!", 0, 400);
       for (int j = 0; j < 10; j++) {
         g.reload(new Bread(g.x, g.y, 0, 150, 150));
       }
     }
     println(code);
   }
+}
 }
     
 class Clock
@@ -494,6 +590,10 @@ public void draw() {
 
 public void keyPressed() {
   window.keyPress(key);
+}
+
+public void mousePressed(){
+  window.mousePress();
 }
   public void settings() {  size(800, 600, P3D); }
   static public void main(String[] passedArgs) {
