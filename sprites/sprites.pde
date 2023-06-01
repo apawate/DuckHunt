@@ -264,7 +264,7 @@ class Gun {
     }
     if (connected) {
       mx = (int) map(deg - 90, 180, 0, 0, width);
-      my = (int) map(kanye, 0, 255, 0, height);
+      my = (int) map(kanye, 255, 0, 0, height);
     }
     imageMode(CENTER);
     for (int i = 0; i < fired.size(); i++)
