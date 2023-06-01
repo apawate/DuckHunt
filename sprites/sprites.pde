@@ -1,7 +1,14 @@
 import java.util.*;
 import processing.sound.*;
+import processing.serial.*;
 SoundFile soundtrack;
 SoundFile die;
+Serial myPort;
+String input = "";
+boolean connected = false;
+int kanye;
+int deg;
+boolean reloaded = false;
 
 GameWindow window;
 /** Represents a single game character in DuckFeed with a position, velocity, collision detection and display method.
@@ -234,6 +241,8 @@ class Gun {
   float x = width/2;
   float y = height ;
   float z = 0;
+  int mx;
+  int my;
   public Gun() {
     barrel = loadImage("gun.png");
     ammo = new LinkedList<Bread>();
@@ -249,6 +258,14 @@ class Gun {
     return fired;
   }
   void turn() {
+    if (!connected) {
+      mx = mouseX;
+      my = mouseY;
+    }
+    if (connected) {
+      mx = (int) map(deg - 90, 180, 0, 0, width);
+      my = (int) map(kanye, 0, 255, 0, height);
+    }
     imageMode(CENTER);
     for (int i = 0; i < fired.size(); i++)
     {
@@ -260,10 +277,10 @@ class Gun {
     }
     pushMatrix();
     translate(width/2, height - 25, 0);
-    if (width/2 != mouseX && mouseX > width/2)
-    rotate(atan((height - mouseY)/(width/2 - mouseX)) + PI/2);
-    if (width/2 != mouseX && mouseX < width/2)
-    rotate(atan((height - mouseY)/(width/2 - mouseX)) + 3 * PI/ 2);
+    if (width/2 != mx && mx > width/2)
+    rotate(atan((height - my)/(width/2 - mx)) + PI/2);
+    if (width/2 != mx && mx < width/2)
+    rotate(atan((height - my)/(width/2 - mx)) + 3 * PI/ 2);
     image(barrel, 0, 0, 60, 120);
     popMatrix();
     imageMode(CORNER);
@@ -279,7 +296,11 @@ class Gun {
   
   void reload() {
     ammo.clear();
-    while (ammo.size() < 10)
+    int a = 10;
+    if (connected) {
+      a = 100;
+    }
+    while (ammo.size() < a)
     {
     ammo.add(new Bread(x, y, 0, 50, 50));
     }
@@ -293,8 +314,8 @@ class Gun {
       return null;
     }
     Bread b = ammo.remove();
-    float targetX = mouseX;
-    float targetY = mouseY;
+    float targetX = mx;
+    float targetY = my;
     float vy = -(targetY - height)*(targetY - height)/7500;
     float vx = (targetX - width/2)/30*3.27;
     float vz = -100;
@@ -432,6 +453,7 @@ class GameWindow {
     }
     println(code);
   }
+  
 }
     
 class Clock
@@ -464,21 +486,53 @@ class Clock
       return time;
     }
     
-  }
+}
 
 void setup() {
   size(800, 600, P3D);
+  myPort = new Serial(this, "/dev/ttyACM0", 9600);
+  myPort.bufferUntil('#');
+  connected = true;
   window = new GameWindow();
-  soundtrack = new SoundFile(this, "biggest.wav");
+  soundtrack = new SoundFile(this, "biggest2.wav");
   die = new SoundFile(this, "bird.wav");
   soundtrack.amp(0.25);
   soundtrack.loop();
 
 }
+
+void serialEvent(Serial myPort) {
+  input = myPort.readStringUntil('#');
+}
+
 void draw() {
   window.display();
+  println(connected);
+  String degree = "0";
+  String power = "0";
+  if (input.length() == 7) {
+     connected = true;
+     degree = input.substring(0, 3);
+     power = input.substring(3, 6);
+  }
+  else {
+    connected = false;
+  }
+  println("Degree " + degree);
+  println("Power " + power);
+  deg = Integer.parseInt(degree);
+  kanye = Integer.parseInt(power);
+  if (connected) {
+    if ((kanye == 0)) {
+      window.keyPress('r');
+    }
+    else {
+      window.keyPress('k');
+    }
+    
+  }
 }
 
 void keyPressed() {
-  window.keyPress(key);
+      window.keyPress(key);
 }
