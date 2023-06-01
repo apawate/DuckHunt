@@ -345,7 +345,6 @@ class Gun {
   
 class GameWindow {
   boolean added;
-  String typing;
   String currentPlayer;
   ArrayList<Bird> birds;
   HashMap<String, Integer> players;
@@ -369,7 +368,6 @@ class GameWindow {
   PFont f;
   public GameWindow() {
     added = false;
-    typing = "";
     currentPlayer = "";
     players = new HashMap<String, Integer>();
     scoreboard = new PriorityQueue<Player>();
@@ -451,8 +449,7 @@ class GameWindow {
       textFont(f, 50);
       text("DUCK FEED", 300, 200);
       textFont(f, 20);
-      text("Enter Username: " + typing, 300, 300);
-      text("Current Player: " + currentPlayer, 300, 320);
+      text("Type Username: " + currentPlayer, 300, 300);
       text("*Click to Start*", 300, 500);
       scoreboard.clear();
       added = false;
@@ -510,16 +507,12 @@ class GameWindow {
   public void keyPress(char k) {
     if (!gameStart)
     {
-      if (key == '\n')
+      if (key == BACKSPACE && currentPlayer.length() > 0)
       {
-        currentPlayer = typing;
-        typing = "";
-      } else if (key == BACKSPACE && typing.length() > 0)
-      {
-        typing = typing.substring(0, typing.length() - 1);
+        currentPlayer = currentPlayer.substring(0, currentPlayer.length() - 1);
       }
       else {
-        typing = typing + key;
+        currentPlayer = currentPlayer + key;
       }
     } else {
     if (k == 'r') {
