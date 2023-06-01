@@ -164,7 +164,7 @@ class Bird extends GameCharacter {
   }
   public void display() {
     pushMatrix();
-    translate(x, y, -3000);
+    translate(x, y, z);
     if (foodcount < starvelimit) {
       image(flop[frameCount/5 %2], x, y, length, height);
     }
@@ -406,11 +406,11 @@ class GameWindow {
   public Bird spawn(float seed) {
     int r = int(random(2));
     if (r == 1) {
-      nu = new Duck(-2000, random(1000) - 800, -2000, 700, 700);
-      nu.accelerate(16 + random(seed), 0, 0);
+      nu = new Duck(-2000, random(1000) - 800, -2000, 550, 550);
+      nu.accelerate(12 + random(seed), 0, 0);
     }
     else {
-      nu = new Pelican(-2000, random(1000) - 800, -2000, 700, 700);
+      nu = new Pelican(-2000, random(1000) - 800, -2000, 650, 650);
       nu.accelerate(6 + (random(seed)/3), 0, 0);
     }
     birds.add(nu);
