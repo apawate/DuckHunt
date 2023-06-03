@@ -656,7 +656,7 @@ public class DuckFeed extends PApplet {
           Player p = iter.next();
           textFont(f, 20);
           text("Scoreboard (top 5): ", 300, 250);
-          text(i + ". " + p.user() + " " + p.score, 300, 250 + 30 * i);
+          text(i + ". " + p.user() + " " + p.score(), 300, 250 + 30 * i);
         }
         text("*Click to Restart*", 300, 500);
       } else {
