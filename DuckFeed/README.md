@@ -6,7 +6,7 @@ DUCK FEED FOR LIFE!
 ## How to run the Java code
 
 ### Set up core.java
-First, [download Processing](processing.org/download) if you haven't already; it's essential for the beta versions and quite possibly the main version of this code.Under the **Java Projects** dropdown menu in the VSCode sidebar, add `core.java` as a new library. This will allow Processing to be used as a graphics program for your code. Click the **+** sign under **Referenced Libraries** and navigate to that file.
+First, [download Processing](https://processing.org/download) if you haven't already; it's essential for the beta versions and quite possibly the main version of this code.Under the **Java Projects** dropdown menu in the VSCode sidebar, add `core.java` as a new library. This will allow Processing to be used as a graphics program for your code. Click the **+** sign under **Referenced Libraries** and navigate to that file.
 
 To find `core.java` (if the version we have provided doesn't work), look inside the Processing folder in your Documents or Downloads, and then click into the `core` folder and click some more until you find it.
 
@@ -24,7 +24,7 @@ If you have JDK-11, delete that and make sure you have JDK-8 instead. For some u
 Wire up the HM-10 Bluetooth Module (circuit diagrams are available online) and run the `bluetoothducks.ino` file under `DuckFeed`. Then, download the [Duino](https://github.com/davebaraka/duino) app from the Google Play store and connect to the HM-10. Run `sprites.pde` (NOT DuckFeed.java, that doesn't support serial functionality) and edit the port value to fit the port your Arduino is connected at. Then watch the magic happen! It's still in a beta version, but that doesn't mean it is _completely_ nonfunctional.
 
 ### Beta
-The `sprites.pde` file contains beta features such as sound and Arduino app control. Run it with [Processing](processing.org) and watch the buggy magic occur!
+The `sprites.pde` file contains beta features such as sound and Arduino app control. Run it with [Processing](https://processing.org) and watch the buggy magic occur!
 
 
 _Questions? Contact us [here](mailto:apawate739@student.fuhsd.org)!_
