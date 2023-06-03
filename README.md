@@ -6,7 +6,7 @@ DUCK FEED FOR LIFE!
 ## How to run the Java code
 
 ### Set up core.java
-Under the **Java Projects** dropdown menu in the VSCode sidebar, add `core.java` as a new library. This will allow Processing to be used as a graphics program for your code. Click the **+** sign under **Java Dependencies** and navigate to that file.
+First, [download Processing](processing.org/download) if you haven't already; it's essential for the beta versions and quite possibly the main version of this code.Under the **Java Projects** dropdown menu in the VSCode sidebar, add `core.java` as a new library. This will allow Processing to be used as a graphics program for your code. Click the **+** sign under **Referenced Libraries** and navigate to that file.
 
 To find `core.java` (if the version we have provided doesn't work), look inside the Processing folder in your Documents or Downloads, and then click into the `core` folder and click some more until you find it.
 
@@ -26,4 +26,5 @@ Wire up the HM-10 Bluetooth Module (circuit diagrams are available online) and r
 ### Beta
 The `sprites.pde` file contains beta features such as sound and Arduino app control. Run it with [Processing](processing.org) and watch the buggy magic occur!
 
-Questions? Contact us [here](mailto:apawate739@student.fuhsd.org)
+
+_Questions? Contact us [here](mailto:apawate739@student.fuhsd.org)!_
