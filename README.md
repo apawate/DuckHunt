@@ -18,4 +18,12 @@ If you have JDK-11, delete that and make sure you have JDK-8 instead. For some u
 
 ### That's it!
 
+## Arduino and DuckFeed: Beta Version
+
+### Arduino
+Wire up the HM-10 Bluetooth Module (circuit diagrams are available online) and run the `bluetoothducks.ino` file under `DuckFeed`. Then, download the [Duino](https://github.com/davebaraka/duino) app from the Google Play store and connect to the HM-10. Run `sprites.pde` (NOT DuckFeed.java, that doesn't support serial functionality) and edit the port value to fit the port your Arduino is connected at. Then watch the magic happen! It's still in a beta version, but that doesn't mean it is _completely_ nonfunctional.
+
+### Beta
+The `sprites.pde` file contains beta features such as sound and Arduino app control. Run it with [Processing](processing.org) and watch the buggy magic occur!
+
 Questions? Contact us [here](mailto:apawate739@student.fuhsd.org)
