@@ -4,7 +4,8 @@
  * @author Antone Jung
  * @author Nicholas Lee
  * @author Caius Leung
- * @version 5/31/2023
+ * @author Period 1, AP CS A 2023
+ * @version 6/2/2023
  */
 
 import processing.core.*;
@@ -263,7 +264,6 @@ public class DuckFeed extends PApplet {
     public Duck(float x, float y, float z, int length, int height) {
       super(x, y, z, length, height);
       foodlimit = 15;
-      name = "Duck"; // Needs to be changed to some kind of unique identifier
       starvelimit = 5;
       foodcount = 10;
       flap[0] = loadImage("duck0.png");
@@ -300,7 +300,7 @@ public class DuckFeed extends PApplet {
   }
 
   /**
-   * Represents a Bread in DuckFeed with a position, and methods to display and collide.
+   * Represents a Bread in DuckFeed with a position, a custom display method and a collision method that checks for collisions with all birds.
    */
   class Bread extends GameCharacter {
     PImage img = new PImage();
@@ -348,7 +348,7 @@ public class DuckFeed extends PApplet {
   }
 
   /**
-   * Represents a Gun in DuckFeed with a position, and methods to display and fire.
+   * Represents a Gun in DuckFeed with a position, and methods to display and fire. Has an "ammo belt", represented by a Queue<Bread>, as well as an ArrayList<Bread> to keep track of fired items.
    */
   class Gun {
     PFont f;
@@ -500,7 +500,7 @@ public class DuckFeed extends PApplet {
   }
 
   /**
-   * The main class of DuckFeed, which contains the game window and all the birds.
+   * GameWindow: the main class of DuckFeed, which contains the game window and all the birds and sets up the whole game by implementing these features.
    */
   class GameWindow {
     boolean added;
