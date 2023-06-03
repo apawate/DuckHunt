@@ -490,8 +490,8 @@ class Clock
 
 void setup() {
   size(800, 600, P3D);
-  myPort = new Serial(this, "/dev/ttyACM0", 9600);
-  myPort.bufferUntil('#');
+  //myPort = new Serial(this, "/dev/ttyACM0", 9600); // Change this to the port that your Arduino is connected at
+  //myPort.bufferUntil('#');
   connected = true;
   window = new GameWindow();
   soundtrack = new SoundFile(this, "biggest2.wav");
